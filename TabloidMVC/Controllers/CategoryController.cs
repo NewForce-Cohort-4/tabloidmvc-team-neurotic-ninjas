@@ -24,7 +24,7 @@ namespace TabloidMVC.Controllers
         // GET: CategoryController
         public ActionResult Index()
         {
-            List<Category> categories = _categoryRepository.GetAll().OrderBy(c => c.Name).ToList();
+            List<Category> categories = _categoryRepository.GetAll();
             return View(categories);
         }
 
