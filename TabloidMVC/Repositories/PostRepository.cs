@@ -113,7 +113,7 @@ namespace TabloidMVC.Repositories
                               LEFT JOIN UserProfile u ON p.UserProfileId = u.id
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
                         WHERE IsApproved = 1 AND PublishDateTime<SYSDATETIME() AND UserProfileId = @id
-                        ORDER BY PublishDateTime DESC";
+                        ORDER BY p.CreateDateTime DESC";
 
                     cmd.Parameters.AddWithValue("@id", id);
                     var reader = cmd.ExecuteReader();
