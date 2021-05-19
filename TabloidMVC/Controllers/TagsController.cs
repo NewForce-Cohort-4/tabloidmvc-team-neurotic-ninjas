@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -22,32 +23,34 @@ namespace TabloidMVC.Controllers
             _postRepository = postRepository;
         }
 
-        // GET: TagsController1
+        // GET: TagsController
         public ActionResult Index()
         {
             List<Tags> tags = _tagsRepository.GetAll().OrderBy(c => c.Name).ToList();
             return View(tags);
         }
 
-        // GET: TagsController1/Details/5
+        // GET: TagsController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: TagsController1/Create
+        // GET: TagsController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: TagsController1/Create
+        // POST: TagsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Tags tags)
         {
             try
             {
+            _tagsRepository.AddTags(tags);
+               
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -56,13 +59,13 @@ namespace TabloidMVC.Controllers
             }
         }
 
-        // GET: TagsController1/Edit/5
+        // GET: TagsController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: TagsController1/Edit/5
+        // POST: TagsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -77,13 +80,13 @@ namespace TabloidMVC.Controllers
             }
         }
 
-        // GET: TagsController1/Delete/5
+        // GET: TagsController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: TagsController1/Delete/5
+        // POST: TagsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
