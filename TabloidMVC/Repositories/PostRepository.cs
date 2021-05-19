@@ -92,7 +92,7 @@ namespace TabloidMVC.Repositories
             }
         }
 
-        public Post GetPostsByUserId(int id)
+        public List<Post> GetPostsByUserId(int id)
         {
             using (var conn = Connection)
             {
@@ -118,16 +118,16 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@id", id);
                     var reader = cmd.ExecuteReader();
 
-                    Post post = null;
+                    List<Post> posts = new List<Post>();
 
-                    if (reader.Read())
+                    while (reader.Read())
                     {
-                        post = NewPostFromReader(reader);
+                        posts.Add(NewPostFromReader(reader));
                     }
 
                     reader.Close();
 
-                    return post;
+                    return posts;
                 }
             }
         }
