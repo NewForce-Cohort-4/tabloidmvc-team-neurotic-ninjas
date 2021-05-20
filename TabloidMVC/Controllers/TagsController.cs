@@ -70,7 +70,7 @@ namespace TabloidMVC.Controllers
         // POST: TagsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Tags tags)
+        public ActionResult Edit(int id, Tags tags)
         {
             try
             {
