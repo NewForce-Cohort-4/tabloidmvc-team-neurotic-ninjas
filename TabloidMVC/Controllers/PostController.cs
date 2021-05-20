@@ -75,6 +75,29 @@ namespace TabloidMVC.Controllers
             }
         }
 
+        // GET: PostController/Delete/5
+        public ActionResult Delete(int id)
+        {
+            Post postToDelete = _postRepository.GetPostById(id);
+            return View(postToDelete);
+        }
+
+        // POST: PostController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, Post post)
+        {
+            try
+            {
+                _postRepository.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         private int GetCurrentUserProfileId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
