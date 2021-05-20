@@ -106,7 +106,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-        public void EditTag(int id)
+        public void EditTag(Tags tag)
         {
             using (SqlConnection conn = Connection)
             {
@@ -120,7 +120,8 @@ namespace TabloidMVC.Repositories
                             WHERE Id = @id
                         ";
 
-                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@id", tag.Id);
+                    cmd.Parameters.AddWithValue("@id", tag.Name);
 
                     cmd.ExecuteNonQuery();
                 }

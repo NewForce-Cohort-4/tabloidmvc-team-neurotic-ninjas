@@ -13,7 +13,7 @@ namespace TabloidMVC.Repositories
         void AddTags(Tags tags);
         Tags GetTagById(int tagId);
         void DeleteTag(int tagId);
-        void EditTag(int tagId);
+        void EditTag(Tags tags);
     }
 }
 
