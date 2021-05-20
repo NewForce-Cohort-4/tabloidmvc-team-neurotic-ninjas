@@ -231,11 +231,19 @@ namespace TabloidMVC.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"UPDATE Post
-                                        SET [Name] = @name
+                                        SET Title = @title,
+                                            Content = @content,
+                                            CategoryId = @categoryId,
+                                            ImageLocation = @imageLocation,
+                                            PublishDateTime = @publishDate
                                         WHERE Id = @id";
 
-                    cmd.Parameters.AddWithValue("@id", category.Id);
-                    cmd.Parameters.AddWithValue("@name", category.Name);
+                    cmd.Parameters.AddWithValue("@id", post.Id);
+                    cmd.Parameters.AddWithValue("@title", post.Title);
+                    cmd.Parameters.AddWithValue("@content", post.Content);
+                    cmd.Parameters.AddWithValue("@categoryId", post.CategoryId);
+                    cmd.Parameters.AddWithValue("@imageLocation", post.ImageLocation);
+                    cmd.Parameters.AddWithValue("@publishDate", post.PublishDateTime);
 
                     cmd.ExecuteNonQuery();
                 }
