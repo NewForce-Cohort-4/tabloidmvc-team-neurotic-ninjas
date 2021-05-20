@@ -108,7 +108,7 @@ namespace TabloidMVC.Repositories
         }
         public void EditTag(Tags tag)
         {
-            using (SqlConnection conn = Connection)
+            using (var conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
@@ -116,7 +116,7 @@ namespace TabloidMVC.Repositories
                     cmd.CommandText = @"
                             UPDATE Tag
                             SET 
-                                [Name] = @name,
+                                [Name] = @name
                             WHERE Id = @id
                         ";
 

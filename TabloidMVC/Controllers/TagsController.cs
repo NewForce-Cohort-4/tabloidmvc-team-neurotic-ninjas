@@ -77,7 +77,7 @@ namespace TabloidMVC.Controllers
                 _tagsRepository.EditTag(tags);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
                 return View();
             }
