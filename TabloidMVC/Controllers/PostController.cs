@@ -65,10 +65,6 @@ namespace TabloidMVC.Controllers
         {
             try
             {
-                vm.Post.CreateDateTime = DateAndTime.Now;
-                vm.Post.IsApproved = true;
-                vm.Post.UserProfileId = GetCurrentUserProfileId();
-
                 _postRepository.Add(vm.Post);
 
                 return RedirectToAction("Details", new { id = vm.Post.Id });
