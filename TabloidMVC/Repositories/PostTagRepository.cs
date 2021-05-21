@@ -15,23 +15,24 @@ namespace TabloidMVC.Repositories
         // tagIds = [2, 3]
         public void AddPostTag(int postId, List<int> tagIds)
         {
-            string sqlQuery = "";
-            foreach (int tagId in tagIds)
-            {
-                sqlQuery += @$"INSERT INTO PostTag (PostId, TagId)
-                                VALUES ({postId}, {tagId})";
-            }
+            throw new NotImplementedException();
+            //string sqlQuery = "";
+            //foreach (int tagId in tagIds)
+            //{
+            //    sqlQuery += @$"INSERT INTO PostTag (PostId, TagId)
+            //                    VALUES ({postId}, {tagId})";
+            //}
 
-            using (var conn = Connection)
-            {
-                conn.Open();
-                using (var cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = sqlQuery;
+            //using (var conn = Connection)
+            //{
+            //    conn.Open();
+            //    using (var cmd = conn.CreateCommand())
+            //    {
+            //        cmd.CommandText = sqlQuery;
 
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            //        cmd.ExecuteNonQuery();
+            //    }
+            //}
         }
 
         //public void AddPostTag(int postId, List<int> tagIds)

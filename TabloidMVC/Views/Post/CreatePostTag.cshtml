@@ -10,26 +10,12 @@
     <h4>Post: @*@Model.Post.Title*@</h4>
     <hr />
     <div class="row">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Tag Name
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Tags item in Model.TagOptions)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <select name="Tags" multiple size="10">
+            @foreach (Tags item in Model.TagOptions)
+            {
+            <option value="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</option>
+            }
+        </select>
         <div class="col-md-4">
             <form asp-action="CreatePostTag">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>

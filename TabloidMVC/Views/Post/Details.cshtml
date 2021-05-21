@@ -17,6 +17,9 @@
             </div>
 
         </section>
+        <section class="px-3">
+            <a asp-action="CreatePostTag" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View">Manage Tags</a>
+        </section>
         <hr />
         @if (!string.IsNullOrWhiteSpace(Model.ImageLocation))
         {
