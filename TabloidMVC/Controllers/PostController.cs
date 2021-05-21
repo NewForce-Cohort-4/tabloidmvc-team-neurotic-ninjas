@@ -14,11 +14,15 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ITagsRepository _tagRepository;
+        private readonly IPostTagRepository _postTagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ITagsRepository tagRepository, IPostTagRepository postTagRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _tagRepository = tagRepository;
+            _postTagRepository = postTagRepository;
         }
 
         public IActionResult Index()
@@ -103,6 +107,33 @@ namespace TabloidMVC.Controllers
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(id);
+        }
+
+        //--------------- Post Tag ----------------------
+        // CREATE (GET) POST TAG: PostController/CreatePostTag/2
+        public IActionResult CreatePostTag(int postId)
+        {
+            PostTagCreateViewModel vm = new PostTagCreateViewModel();
+            vm.TagOptions = _tagRepository.GetAll();
+            vm.Post = _postRepository.GetPublishedPostById(postId);
+            return View(vm);
+        }
+
+        // CREATE (POST) POST TAG: PostController/CreatePostTag/2
+        [HttpPost]
+        public IActionResult CreatePostTag(PostTagCreateViewModel vm)
+        {
+            try
+            {
+                _postTagRepository.AddPostTag(vm.Post.Id, vm.TagsIdsToAdd);
+
+                return RedirectToAction("Details", new { id = vm.Post.Id });
+            }
+            catch
+            {
+                vm.TagOptions = _tagRepository.GetAll();
+                return View(vm);
+            }
         }
     }
 }

@@ -8,7 +8,8 @@ namespace TabloidMVC.Models.ViewModels
     public class PostTagCreateViewModel
     {
         public List<Tags> TagOptions { get; set; }
-        public List<int> TagIds { get; set; }
+        public List<int> TagsIdsToAdd { get; set; }
+        public List<int> TagsIdsToRemove { get; set; }
         public Post Post { get; set; }
     }
 }
