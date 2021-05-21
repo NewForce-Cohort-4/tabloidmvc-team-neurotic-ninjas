@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
+using System;
 using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
@@ -107,28 +108,28 @@ namespace TabloidMVC.Controllers
 
         //--------------- Post Tag ----------------------
         // CREATE (GET) POST TAG: PostController/CreatePostTag/2
-        public IActionResult CreatePostTag(int postId)
+        public IActionResult CreatePostTag(int id)
         {
             PostTagCreateViewModel vm = new PostTagCreateViewModel();
             vm.TagOptions = _tagRepository.GetAll();
-            vm.Post = _postRepository.GetPublishedPostById(postId);
+            vm.Post = _postRepository.GetPublishedPostById(id);
+            //vm.TagsIds = new List<int>();
             return View(vm);
         }
 
         // CREATE (POST) POST TAG: PostController/CreatePostTag/2
         [HttpPost]
-        public IActionResult CreatePostTag(PostTagCreateViewModel vm)
+        public IActionResult CreatePostTag(int id, PostTagCreateViewModel vm)
         {
             try
             {
-                _postTagRepository.AddPostTag(vm.Post.Id, vm.TagsIdsToAdd);
+                _postTagRepository.AddPostTag(id, vm.TagIds);
 
-                return RedirectToAction("Details", new { id = vm.Post.Id });
+                return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ex)
             {
-                vm.TagOptions = _tagRepository.GetAll();
-                return View(vm);
+                return RedirectToAction("Index");
             }
         }
     }

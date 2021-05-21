@@ -15,12 +15,10 @@ namespace TabloidMVC.Repositories
         // tagIds = [2, 3]
         public void AddPostTag(int postId, List<int> tagIds)
         {
-            //throw new NotImplementedException();
             string sqlQuery = "";
             foreach (int tagId in tagIds)
             {
-                sqlQuery += @$"INSERT INTO PostTag (PostId, TagId)
-                                VALUES ({postId}, {tagId})";
+                sqlQuery += $"INSERT INTO PostTag (PostId, TagId) VALUES ({postId}, {tagId})";
             }
 
             using (var conn = Connection)
@@ -35,38 +33,26 @@ namespace TabloidMVC.Repositories
             }
         }
 
-        //public void AddPostTag(int postId, List<int> tagIds)
-        //{
-        //    string sqlQuery = "";
-        //    foreach (int tagId in tagIds)
-        //    {
-        //        sqlQuery += @$"INSERT INTO PostTag (PostId, TagId)
-        //                        VALUES ({postId}, {tagId})";
-        //    }
 
-        //    using (var conn = Connection)
-        //    {
-        //        conn.Open();
-        //        using (var cmd = conn.CreateCommand())
-        //        {
-        //            foreach (int tagId in tagIds)
-        //            {
-        //                cmd.CommandText += @$"INSERT INTO PostTag (PostId, TagId)
-        //                        VALUES (@postId, @tagId)";
-        //                cmd.Parameters.AddWithValue("@postId", postId);
-        //                cmd.Parameters.AddWithValue("@tagId", tagId);
-
-        //            }
-                    
-
-        //            cmd.ExecuteNonQuery();
-        //        }
-        //    }
-        //}
-
-        public void DeletePostTag(int postTagId)
+        public void DeletePostTag(int postId, List<int> tagIds)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            string sqlQuery = "";
+            foreach (int tagId in tagIds)
+            {
+                sqlQuery += $"DELETE FROM PostTag pt WHERE pt.PostId = {postId} AND pt.TagId = {tagId}";
+            }
+
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = sqlQuery;
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }
