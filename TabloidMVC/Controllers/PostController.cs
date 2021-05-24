@@ -129,6 +129,37 @@ namespace TabloidMVC.Controllers
             }
         }
 
+        // GET: PostController/Edit/5
+        public ActionResult Edit(int id)
+        {
+            Post post = _postRepository.GetPublishedPostById(id);
+            List<Category> categories = _postRepository.GetAllCategories();
+
+            EditPostViewModel vm = new EditPostViewModel()
+            {
+                Post = post,
+                Categories = categories
+            };
+
+            return View(vm);
+        }
+
+        // POST: PostController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, Post post)
+        {
+            try
+            {
+                _postRepository.Edit(post);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         private int GetCurrentUserProfileId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);

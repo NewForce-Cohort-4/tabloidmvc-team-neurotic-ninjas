@@ -51,6 +51,34 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        public List<Category> GetAllCategories()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT id, name FROM Category ORDER BY name";
+                    var reader = cmd.ExecuteReader();
+
+                    var categories = new List<Category>();
+
+                    while (reader.Read())
+                    {
+                        categories.Add(new Category()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("name")),
+                        });
+                    }
+
+                    reader.Close();
+
+                    return categories;
+                }
+            }
+        }
+
         public Post GetPublishedPostById(int id)
         {
             using (var conn = Connection)
@@ -173,6 +201,42 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        //public List<Category> GetCategoriesByPostId(int postId)
+        //{
+        //    using (SqlConnection conn = Connection)
+        //    {
+        //        conn.Open();
+
+        //        using (SqlCommand cmd = conn.CreateCommand())
+        //        {
+        //            cmd.CommandText = @"
+        //        SELECT Id, Name 
+        //        FROM Category
+        //        WHERE PostId = @postId
+        //    ";
+
+        //            cmd.Parameters.AddWithValue("@postId", postId);
+
+        //            SqlDataReader reader = cmd.ExecuteReader();
+
+        //            List<Category> categories = new List<Category>();
+
+        //            while (reader.Read())
+        //            {
+        //                Category category = new Category()
+        //                {
+        //                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+        //                    Name = reader.GetString(reader.GetOrdinal("Name")),
+        //                };
+
+        //                categories.Add(category);
+        //            }
+        //            reader.Close();
+        //            return categories;
+        //        }
+        //    }
+        //}
+
 
         public void Add(Post post)
         {
@@ -217,6 +281,33 @@ namespace TabloidMVC.Repositories
                         ";
 
                     cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void Edit(Post post)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Post
+                                        SET Title = @title,
+                                            Content = @content,
+                                            CategoryId = @categoryId,
+                                            ImageLocation = @imageLocation,
+                                            PublishDateTime = @publishDate
+                                        WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", post.Id);
+                    cmd.Parameters.AddWithValue("@title", post.Title);
+                    cmd.Parameters.AddWithValue("@content", post.Content);
+                    cmd.Parameters.AddWithValue("@categoryId", post.CategoryId);
+                    cmd.Parameters.AddWithValue("@imageLocation", post.ImageLocation);
+                    cmd.Parameters.AddWithValue("@publishDate", post.PublishDateTime);
 
                     cmd.ExecuteNonQuery();
                 }
