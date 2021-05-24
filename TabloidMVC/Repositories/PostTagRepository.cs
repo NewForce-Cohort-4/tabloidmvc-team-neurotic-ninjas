@@ -11,6 +11,39 @@ namespace TabloidMVC.Repositories
     {
         public PostTagRepository(IConfiguration config) : base(config) { }
 
+        public List<Tags> GetPostTags(int postId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT pt.id AS postTagId, pt.PostId, pt.TagId, t.[Name] 
+                                          FROM PostTag pt
+                                     LEFT JOIN Tag t ON TagId = t.id
+                                         WHERE PostId = @id";
+                    cmd.Parameters.AddWithValue("@id", postId);
+
+                    var reader = cmd.ExecuteReader();
+
+                    List<Tags> PostTags = new List<Tags>();
+
+                    while (reader.Read())
+                    {
+                        Tags tag = new Tags()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("TagId")),
+                            Name = reader.GetString(reader.GetOrdinal("Name"))
+                        };
+                        PostTags.Add(tag);
+                    }
+
+                    reader.Close();
+                    return PostTags;
+                }
+            }
+        }
+
         // postId = 1
         // tagIds = [2, 3]
         public void AddPostTag(int postId, List<int> tagIds)
@@ -18,7 +51,7 @@ namespace TabloidMVC.Repositories
             string sqlQuery = "";
             foreach (int tagId in tagIds)
             {
-                sqlQuery += $"INSERT INTO PostTag (PostId, TagId) VALUES ({postId}, {tagId})";
+                sqlQuery += $"INSERT INTO PostTag (PostId, TagId) VALUES ({postId}, {tagId}) ";
             }
 
             using (var conn = Connection)
@@ -34,13 +67,13 @@ namespace TabloidMVC.Repositories
         }
 
 
-        public void DeletePostTag(int postId, List<int> tagIds)
+        public void DeletePostTag(int postId, List<int> tagIdsToRemove)
         {
             //throw new NotImplementedException();
             string sqlQuery = "";
-            foreach (int tagId in tagIds)
+            foreach (int tagId in tagIdsToRemove)
             {
-                sqlQuery += $"DELETE FROM PostTag pt WHERE pt.PostId = {postId} AND pt.TagId = {tagId}";
+                sqlQuery += $"DELETE FROM PostTag WHERE PostId = {postId} AND TagId = {tagId} ";
             }
 
             using (var conn = Connection)

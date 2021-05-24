@@ -41,7 +41,8 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
-            var post = _postRepository.GetPublishedPostById(id);
+            Post post = _postRepository.GetPublishedPostById(id);
+            post.PostTags = _postTagRepository.GetPostTags(id);
             if (post == null)
             {
                 int userId = GetCurrentUserProfileId();
@@ -108,26 +109,51 @@ namespace TabloidMVC.Controllers
 
         //--------------- Post Tag ----------------------
         // CREATE (GET) POST TAG: PostController/CreatePostTag/2
-        public IActionResult CreatePostTag(int id)
+        public IActionResult ManagePostTag(int id)
         {
             PostTagCreateViewModel vm = new PostTagCreateViewModel();
+            vm.CurrentTags = _postTagRepository.GetPostTags(id);
             vm.TagOptions = _tagRepository.GetAll();
+            foreach (Tags tag in vm.CurrentTags)
+            {
+                int index = vm.TagOptions.FindIndex(t => (t.Id == tag.Id));
+                if (index != -1)
+                {
+                    vm.TagOptions.RemoveAt(index);
+                }
+            }
             vm.Post = _postRepository.GetPublishedPostById(id);
-            //vm.TagsIds = new List<int>();
+
             return View(vm);
         }
 
         // CREATE (POST) POST TAG: PostController/CreatePostTag/2
         [HttpPost]
-        public IActionResult CreatePostTag(int id, PostTagCreateViewModel vm)
+        public IActionResult ManagePostTag(int id, PostTagCreateViewModel vm)
         {
             try
             {
-                _postTagRepository.AddPostTag(id, vm.TagIds);
+                _postTagRepository.AddPostTag(id, vm.TagIdsToAdd);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = id });
             }
             catch(Exception ex)
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        // DELETE (POST) POST TAG: PostController/CreatePostTag/2
+        [HttpPost]
+        public IActionResult DeletePostTag(int id, PostTagCreateViewModel vm)
+        {
+            try
+            {
+                _postTagRepository.DeletePostTag(id, vm.TagIdsToRemove);
+
+                return RedirectToAction("Details", new { id = id });
+            }
+            catch (Exception ex)
             {
                 return RedirectToAction("Index");
             }

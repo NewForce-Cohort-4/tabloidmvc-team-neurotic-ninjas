@@ -15,10 +15,15 @@
                 <p class="text-secondary">Written by @Model.UserProfile.DisplayName</p>
                 <p class="text-black-50">Published on @Html.DisplayFor(model => model.PublishDateTime)</p>
             </div>
-
+            <div class="row justify-content-right">
+            @foreach (Tags tag in Model.PostTags)
+            {
+                <span class="badge badge-info">@tag.Name</span>
+            }
+            </div>
         </section>
         <section class="px-3">
-            <a asp-action="CreatePostTag" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View">Manage Tags</a>
+            <a asp-action="ManagePostTag" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View">Manage Tags</a>
         </section>
         <hr />
         @if (!string.IsNullOrWhiteSpace(Model.ImageLocation))
