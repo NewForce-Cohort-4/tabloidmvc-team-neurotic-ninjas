@@ -24,6 +24,16 @@
         </section>
         <section class="px-3">
             <a asp-action="ManagePostTag" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View">Manage Tags</a>
+
+            @if (Model.IsCurrentUser)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Edit">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Delete">
+                    <i class="fas fa-trash"></i>
+                </a>
+            }
         </section>
         <hr />
         @if (!string.IsNullOrWhiteSpace(Model.ImageLocation))
@@ -37,5 +47,8 @@
         <section class="row post__content">
             <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Content)</p>
         </section>
+    </div>
+    <div class="row justify-content-center">
+        <a asp-action="Index">Back to List</a>
     </div>
 </div>

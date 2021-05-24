@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace TabloidMVC.Models
 {
@@ -18,6 +19,7 @@ namespace TabloidMVC.Models
         [DisplayName("Header Image URL")]
         public string ImageLocation { get; set; }
 
+        [DisplayName("Created")]
         public DateTime CreateDateTime { get; set; }
 
         [DisplayName("Published")]
@@ -31,9 +33,13 @@ namespace TabloidMVC.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
-        [DisplayName("Author")]
+        [DisplayName("Author ID")]
         public int UserProfileId { get; set; }
+
+        [DisplayName("Author")]
         public UserProfile UserProfile { get; set; }
         public List<Tags> PostTags { get; set; }
+
+        public bool IsCurrentUser { get; set; }
     }
 }

@@ -12,30 +12,30 @@
     <table class="table">
         <thead>
             <tr>
-        
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Content)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageLocation)
-                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.CreateDateTime)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.Content)
+                </th>*@
+                @*<th>
+                    @Html.DisplayNameFor(model => model.ImageLocation)
+                </th>*@
+                
+                @*<th>
                     @Html.DisplayNameFor(model => model.PublishDateTime)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.IsApproved)
+                </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CategoryId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserProfileId)
+                    @Html.DisplayNameFor(model => model.UserProfile)
                 </th>
                 <th></th>
             </tr>
@@ -44,36 +44,44 @@
             @foreach (var item in Model)
             {
                 <tr>
-            
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Content)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ImageLocation)
-                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CreateDateTime)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PublishDateTime)
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Content)
+                    </td>*@
+                    @*<td>
+                    @Html.DisplayFor(modelItem => item.ImageLocation)
+                </td>*@
+                    @*<td>
+                    @Html.DisplayFor(modelItem => item.PublishDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsApproved)
+                </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.IsApproved)
+                        @Html.DisplayFor(modelItem => item.UserProfile.FullName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CategoryId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserProfileId)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-                    </td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Details">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        @if (item.IsCurrentUser)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Edit">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        }
+                        </td>
                 </tr>
             }
         </tbody>

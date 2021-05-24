@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
@@ -17,18 +18,25 @@ namespace TabloidMVC.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly ITagsRepository _tagRepository;
         private readonly IPostTagRepository _postTagRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ITagsRepository tagRepository, IPostTagRepository postTagRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ITagsRepository tagRepository, IPostTagRepository postTagRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
             _tagRepository = tagRepository;
             _postTagRepository = postTagRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
         public IActionResult Index()
         {
+            int currentUserId = GetCurrentUserProfileId();
             var posts = _postRepository.GetAllPublishedPosts();
+            foreach (Post post in posts)
+            {
+                post.IsCurrentUser = post.UserProfileId == currentUserId ? true : false;
+            }
             return View(posts);
         }
 
@@ -36,13 +44,16 @@ namespace TabloidMVC.Controllers
         {
             int currentUserId = GetCurrentUserProfileId();
             var posts = _postRepository.GetPostsByUserId(currentUserId);
+            foreach (Post post in posts)
+            {
+                post.IsCurrentUser = post.UserProfileId == currentUserId ? true : false;
+            }
             return View(posts);
         }
 
         public IActionResult Details(int id)
         {
             Post post = _postRepository.GetPublishedPostById(id);
-            post.PostTags = _postTagRepository.GetPostTags(id);
             if (post == null)
             {
                 int userId = GetCurrentUserProfileId();
@@ -52,6 +63,20 @@ namespace TabloidMVC.Controllers
                     return NotFound();
                 }
             }
+
+            int currentUserId = GetCurrentUserProfileId();
+
+            post.Category = _categoryRepository.GetCatById(post.CategoryId);
+            post.UserProfile = _userProfileRepository.GetById(post.UserProfileId);
+            post.IsCurrentUser = post.UserProfileId == currentUserId ? true : false;
+
+            List<Tags> tagList = _postTagRepository.GetPostTags(id);
+
+            if (tagList != null)
+            {
+                post.PostTags = tagList;
+            }
+            
             return View(post);
         }
 
@@ -67,6 +92,9 @@ namespace TabloidMVC.Controllers
         {
             try
             {
+                vm.Post.CreateDateTime = DateAndTime.Now;
+                vm.Post.IsApproved = true;
+                vm.Post.UserProfileId = GetCurrentUserProfileId();
                 _postRepository.Add(vm.Post);
 
                 return RedirectToAction("Details", new { id = vm.Post.Id });
