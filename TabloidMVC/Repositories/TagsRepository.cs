@@ -88,6 +88,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
         public void DeleteTag(int id)
         {
             using (SqlConnection conn = Connection)
